@@ -28,7 +28,7 @@ function App() {
 
     const city = cityOptions?.find(opt => opt.name == currentCityName);
     let url = `/weather?latitude=${city?.latitude}&longitude=${city?.longitude}`;
-    axios.get(url).then((response) => {
+    city && axios.get(url).then((response) => {
       console.log('GET' + url + ' ---> received ' + response.data.hourly.temperature_2m.length + ' rows of data');
       setWeatherInfoList(response.data.hourly.time.map((timeStamp: string, i: number) => {
         return {

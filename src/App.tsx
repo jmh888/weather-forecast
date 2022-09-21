@@ -44,10 +44,10 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        Test Weather App
+        Weather Forecasting App
       </header>
 
-      <h2>Weather History for {cityOptions?.find(opt => opt.name == currentCityName)?.name}</h2>
+      <h2>Forecast for {cityOptions?.find(opt => opt.name == currentCityName)?.name}</h2>
 
       <label>Choose a city: </label>
 

@@ -30,7 +30,7 @@ function TemperatureTable({weatherInfoList}: TemperatureTableProps) {
             weatherInfoList.map((item, i) => {
               return (
                 <tr key={'weather-info-list' + i}>
-                  <td>{item.timeStamp}</td>
+                  <td>{new Date(item.timeStamp).toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric"})}</td>
                   <td>{item.temperature}</td>
                   <td>{item.humidity}</td>
                   <td>{item.windSpeed}</td>

@@ -2,38 +2,31 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import TemperatureTable from './components/TemperatureTable';
 import axios from 'axios';
-
-const CITY_OPTIONS = [
-  {
-    name: 'New York, NY',
-    latitude: 52.52,
-    longitude: 13.41,
-  },
-  {
-    name: 'Los Angeles, CA',
-    latitude: 34.05,
-    longitude: -118.24,
-  },
-  {
-    name: 'Phoenix, AZ',
-    latitude: 33.45,
-    longitude: -112.07,
-  },
-  {
-    name: 'Philadelphia, PA',
-    latitude: 39.95,
-    longitude: -75.16,
-  },
-]
+interface CityOption {
+  name: string;
+  latitude: any;
+  longitude: any;
+}
 
 function App() {
 
   const [weatherInfoList, setWeatherInfoList] = useState([]);
   
-  const [currentCityName, setCurrentCityName] = useState(CITY_OPTIONS[0].name);
+  const [currentCityName, setCurrentCityName] = useState<string>();
+
+  const [cityOptions, setCityOptions] = useState<Array<CityOption>>();
 
   useEffect(() => {
-    const city = CITY_OPTIONS.find(opt => opt.name == currentCityName);
+
+    if (!cityOptions) {
+      axios.get('/all-cities').then((response) => {
+        console.log('GET /all-cities');
+        setCityOptions(response.data);
+        setCurrentCityName(response.data[0].name)
+      });
+    }
+
+    const city = cityOptions?.find(opt => opt.name == currentCityName);
     let url = `/weather?latitude=${city?.latitude}&longitude=${city?.longitude}`;
     axios.get(url).then((response) => {
       console.log('GET' + url + ' ---> received ' + response.data.hourly.temperature_2m.length + ' rows of data');
@@ -54,15 +47,17 @@ function App() {
         Test Weather App
       </header>
 
-      <h2>Weather History for {CITY_OPTIONS.find(opt => opt.name == currentCityName)?.name}</h2>
+      <h2>Weather History for {cityOptions?.find(opt => opt.name == currentCityName)?.name}</h2>
 
-      <label>Choose a city:</label>
+      <label>Choose a city: </label>
 
       <select name="cities"
               id="cities"
-              onChange = { (e) => { setCurrentCityName(e.target.value); } } >
+              onChange = { (e) => { setCurrentCityName(e.target.value); } }
+              style={{marginBottom: '2rem'}}>
         {
-          CITY_OPTIONS.map((city, i) => 
+          cityOptions &&
+          cityOptions.map((city, i) => 
             <option value={city.name} key={`city-name-${i}`}>{city.name}</option>
           )
         }

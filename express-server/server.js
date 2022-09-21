@@ -2,6 +2,8 @@ const express = require('express'); //Line 1
 const app = express(); //Line 2
 const port = process.env.PORT || 5000; //Line 3
 const axios = require('axios');
+var fs = require('fs');
+const csv = require('csv-parser')
 
 const FORECAST_API_BASE = "https://api.open-meteo.com/v1/forecast";
 const API_TIMEOUT_SECONDS = 2;
@@ -20,7 +22,6 @@ app.get('/weather', (req, res) => {
     url: FORECAST_API_BASE,
     headers: {
       'Content-Type': 'application/json',
-      // 'User-Agent': NestEndpoints.USER_AGENT_STRING,
       'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
       'Access-Control-Allow-Origin': '*',
     },
@@ -40,9 +41,18 @@ app.get('/weather', (req, res) => {
   })
   .catch(error => console.log(error));
 
-})
+});
 
-// create a GET route
-app.get('/express_backend', (req, res) => { //Line 9
-  res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' }); //Line 10
-}); //Line 11
+app.get('/all-cities', async (req, res) => {
+  let results = [];
+  fs.createReadStream(__dirname + "/../data/uscities.csv")
+    .pipe(csv())
+    .on('data', (data) => results.push(data))
+    .on('end', () => {
+      return res.send(results.map(r => ({
+        name: `${r.city}, ${r.state_name}`,
+        latitude: r.lat,
+        longitude: r.lng,
+      })));
+    });
+})

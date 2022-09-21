@@ -2,7 +2,7 @@ A TypeScript app with an express middle layer for handling api requests
 
 ```sh
 # in one terminal, start the ui
-npm run start
+npm start
 
 # in another terminal, start the express server
 npm run start-server

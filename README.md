@@ -13,3 +13,11 @@ npm run start-server
 Open: http://localhost:3001/
 
 ![Screen Shot 2022-09-22 at 9 20 28 AM](https://user-images.githubusercontent.com/104015901/191758159-a2fc6859-95c9-4545-8e90-9455893ad55f.png)
+
+# Technologies:
+
+## Storybook
+
+Used to develop components isolated.
+
+Installed with `npx storybook init` and ran with `npm run storybook`

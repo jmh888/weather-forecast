@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import TemperatureTable from './components/TemperatureTable';
 import axios from 'axios';
+import { WeatherTable } from './stories/WeatherTable';
 interface CityOption {
   name: string;
   latitude: any;
@@ -64,7 +64,7 @@ function App() {
       </select> 
 
       {
-        weatherInfoList.length > 0 && <TemperatureTable weatherInfoList={weatherInfoList}/>
+        weatherInfoList.length > 0 && <WeatherTable weatherInfoList={weatherInfoList}/>
       }
     </div>
   );

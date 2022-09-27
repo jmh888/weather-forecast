@@ -1,5 +1,6 @@
 import React from 'react';
-import '../styles/TemperatureTable.css';
+
+import './weathertable.css';
 
 interface WeatherInfo {
   timeStamp: string;
@@ -8,11 +9,11 @@ interface WeatherInfo {
   windSpeed: string;
 }
 
-interface TemperatureTableProps {
+interface WeatherTableProps {
   weatherInfoList: Array<WeatherInfo>;
 }
 
-function TemperatureTable({weatherInfoList}: TemperatureTableProps) {
+export const WeatherTable = ({weatherInfoList}: WeatherTableProps) => {
   return (
     <div className="TempTable">
       <table style={{margin: 'auto'}}>
@@ -42,6 +43,4 @@ function TemperatureTable({weatherInfoList}: TemperatureTableProps) {
       </table>
     </div>
   );
-}
-
-export default TemperatureTable;
+};

@@ -60,7 +60,6 @@ function WeatherApp() {
               id="cities"
               onChange = { (e) => {
                 setSelectedCity(e.target.value);
-                queryClient.invalidateQueries(['weatherData'])
               } }
               style={{marginBottom: '2rem'}}>
         {

@@ -14,6 +14,7 @@ interface WeatherTableProps {
 }
 
 export const WeatherTable = ({weatherInfoList}: WeatherTableProps) => {
+
   return (
     <div className="TempTable">
       <table style={{margin: 'auto'}}>
@@ -29,9 +30,12 @@ export const WeatherTable = ({weatherInfoList}: WeatherTableProps) => {
         <tbody>
           {
             weatherInfoList.map((item, i) => {
+              let dateTimeStamp = new Date(item.timeStamp).toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric"});
+              dateTimeStamp = dateTimeStamp === 'Invalid Date' ? "--------, --- --, ----, --:-- --" : dateTimeStamp;
+
               return (
                 <tr key={'weather-info-list' + i}>
-                  <td>{new Date(item.timeStamp).toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric"})}</td>
+                  <td>{dateTimeStamp}</td>
                   <td>{item.temperature}</td>
                   <td>{item.humidity}</td>
                   <td>{item.windSpeed}</td>

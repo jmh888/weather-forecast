@@ -1,45 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import axios from 'axios';
 import { WeatherTable } from './stories/WeatherTable';
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+import { getWeatherInfo } from './api/WeatherApi';
+import { getAllCities } from './api/CitiesApi';
 interface CityOption {
   name: string;
   latitude: any;
   longitude: any;
 }
 
-function App() {
+const queryClient = new QueryClient();
 
-  const [weatherInfoList, setWeatherInfoList] = useState([]);
-  
-  const [currentCityName, setCurrentCityName] = useState<string>();
-
+function WeatherApp() {
+  const [selectedCity, setSelectedCity] = useState<string>();
   const [cityOptions, setCityOptions] = useState<Array<CityOption>>();
-
   useEffect(() => {
-
     if (!cityOptions) {
-      axios.get('/all-cities').then((response) => {
-        console.log('GET /all-cities');
-        setCityOptions(response.data);
-        setCurrentCityName(response.data[0].name)
-      });
+      getAllCities().then(data => {
+        setCityOptions(data);
+        setSelectedCity(data[0].name)
+      })
     }
+  })
 
-    const city = cityOptions?.find(opt => opt.name == currentCityName);
-    let url = `/weather?latitude=${city?.latitude}&longitude=${city?.longitude}`;
-    city && axios.get(url).then((response) => {
-      console.log('GET' + url + ' ---> received ' + response.data.hourly.temperature_2m.length + ' rows of data');
-      setWeatherInfoList(response.data.hourly.time.map((timeStamp: string, i: number) => {
-        return {
-          timeStamp,
-          temperature: response.data.hourly.temperature_2m[i] + ' ' + response.data.hourly_units.temperature_2m,
-          humidity: response.data.hourly.relativehumidity_2m[i] + response.data.hourly_units.relativehumidity_2m,
-          windSpeed: response.data.hourly.windspeed_10m[i] + ' ' + response.data.hourly_units.windspeed_10m,
-        }
-      }))
-    });
-  }, [currentCityName]);
+  let weatherDataQuery = useQuery(["weatherData", selectedCity], async () => {
+    const city = cityOptions?.find(opt => opt.name === selectedCity);
+    return getWeatherInfo(city?.latitude, city?.longitude);
+  },
+  {
+    enabled: cityOptions && cityOptions.length > 0,
+    placeholderData: [...Array(50)].map((_, i) => {
+      return {
+        timeStamp: 'Loading...',
+        temperature: 'Loading...',
+        humidity: 'Loading...',
+        windSpeed: 'Loading...',
+      }
+    }),
+  });
+
+  if (weatherDataQuery.error) {
+    console.log('weatherDataQuery ERROR: ', weatherDataQuery.error);
+  }
 
   return (
     <div className="App">
@@ -47,13 +50,18 @@ function App() {
         Weather Forecasting App
       </header>
 
-      <h2>Forecast for {cityOptions?.find(opt => opt.name == currentCityName)?.name}</h2>
+      {
+        cityOptions && <h2>Forecast for {cityOptions?.find(opt => opt.name === selectedCity)?.name}</h2>
+      }
 
-      <label>Choose a city: </label>
+      <label>Choose a city ({cityOptions?.length} available): </label>
 
       <select name="cities"
               id="cities"
-              onChange = { (e) => { setCurrentCityName(e.target.value); } }
+              onChange = { (e) => {
+                setSelectedCity(e.target.value);
+                queryClient.invalidateQueries(['weatherData'])
+              } }
               style={{marginBottom: '2rem'}}>
         {
           cityOptions &&
@@ -64,10 +72,16 @@ function App() {
       </select> 
 
       {
-        weatherInfoList.length > 0 && <WeatherTable weatherInfoList={weatherInfoList}/>
+        !weatherDataQuery.isLoading && weatherDataQuery.data.length > 0 && <WeatherTable weatherInfoList={weatherDataQuery.data}/>
       }
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <WeatherApp />
+    </QueryClientProvider>
+  );
+}

@@ -16,6 +16,10 @@ app.get('/weather', (req, res) => {
   let latitude = req.query.latitude;
   let longitude = req.query.longitude; 
 
+  if (!latitude || !longitude) {
+    return res.send({});
+  }
+
   const reqSettings = {
     method: 'GET',
     timeout: API_TIMEOUT_SECONDS * 1000,
@@ -28,7 +32,7 @@ app.get('/weather', (req, res) => {
     params: {
       latitude,
       longitude,
-      hourly:'temperature_2m,relativehumidity_2m,windspeed_10m',
+      hourly:'temperature_2m,relativehumidity_2m,windspeed_10m,windgusts_10m,precipitation,rain,pressure_msl,surface_pressure',
       temperature_unit: 'fahrenheit',
       windspeed_unit: 'mph',
       precipitation_unit: 'inch',

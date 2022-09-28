@@ -7,6 +7,10 @@ interface WeatherInfo {
   temperature: string;
   humidity: string;
   windSpeed: string;
+  windGusts: string;
+  rain: string;
+  pressureMsl: string;
+  surfacePressure: string;
 }
 
 interface WeatherTableProps {
@@ -24,6 +28,10 @@ export const WeatherTable = ({weatherInfoList}: WeatherTableProps) => {
             <th>Temperature</th>
             <th>Humidity</th>
             <th>Wind Speed</th>
+            <th>Wind Gusts</th>
+            <th>Rain</th>
+            <th>Pressure (Mean Sea Level)</th>
+            <th>Pressure (Atmospheric)</th>
           </tr>
         </thead>
 
@@ -39,6 +47,10 @@ export const WeatherTable = ({weatherInfoList}: WeatherTableProps) => {
                   <td>{item.temperature}</td>
                   <td>{item.humidity}</td>
                   <td>{item.windSpeed}</td>
+                  <td>{item.windGusts}</td>
+                  <td>{item.rain}</td>
+                  <td>{item.pressureMsl}</td>
+                  <td>{item.surfacePressure}</td>
                 </tr>
               );
             })

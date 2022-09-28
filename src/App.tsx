@@ -70,6 +70,15 @@ function WeatherApp() {
         }
       </select> 
 
+      <div>
+        {
+          !weatherDataQuery.isLoading &&
+            <div>
+              Time range: {weatherDataQuery.data[0].timeStamp} - {weatherDataQuery.data[weatherDataQuery.data.length - 1].timeStamp}
+            </div>
+        }
+      </div>
+
       {
         !weatherDataQuery.isLoading && weatherDataQuery.data.length > 0 && <WeatherTable weatherInfoList={weatherDataQuery.data}/>
       }

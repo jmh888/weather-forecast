@@ -1,6 +1,4 @@
-A TypeScript app with an express middle layer for handling calling the data api (open-meteo API docs: https://open-meteo.com/en/docs).
-
-Run:
+# Run the app:
 
 ```sh
 # in one terminal, start the ui

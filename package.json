@@ -15,6 +15,7 @@
     "@zendeskgarden/react-dropdowns": "^8.57.0",
     "@zendeskgarden/react-tables": "^8.57.0",
     "@zendeskgarden/react-theming": "^8.57.0",
+    "@zendeskgarden/react-typography": "^8.57.0",
     "axios": "^0.27.2",
     "csv-parser": "^3.0.0",
     "express": "^4.18.1",

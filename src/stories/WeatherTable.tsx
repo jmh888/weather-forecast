@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Table,
   Caption,
@@ -10,17 +9,7 @@ import {
   Cell
 } from '@zendeskgarden/react-tables';
 import './weathertable.css';
-
-interface WeatherInfo {
-  timeStamp: string;
-  temperature: string;
-  humidity: string;
-  windSpeed: string;
-  windGusts: string;
-  rain: string;
-  pressureMsl: string;
-  surfacePressure: string;
-}
+import { WeatherInfo } from '../interface/WeatherInfo';
 
 interface WeatherTableProps {
   caption: string;
@@ -31,7 +20,7 @@ export const WeatherTable = ({caption, weatherInfoList}: WeatherTableProps) => {
 
   return (
     <div className="TempTable">
-      <Table style={{margin: 'auto', width: '80%', fontSize: '0.3'}}>
+      <Table size={'small'} style={{margin: 'auto', width: '80%', fontSize: '0.3'}}>
         <Caption>{caption}</Caption>
         <Head>
           <HeaderRow>

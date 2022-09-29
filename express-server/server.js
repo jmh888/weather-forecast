@@ -7,6 +7,7 @@ const csv = require('csv-parser');
 
 const MAX_CITIES = 1000;
 const FORECAST_API_BASE = "https://api.open-meteo.com/v1/forecast";
+const SUNRISE_SUNSET_API_BASE = "https://api.sunrise-sunset.org";
 const API_TIMEOUT_SECONDS = 2;
 
 // This displays message that the server running and listening to specified port
@@ -37,6 +38,37 @@ app.get('/weather', (req, res) => {
       temperature_unit: 'fahrenheit',
       windspeed_unit: 'mph',
       precipitation_unit: 'inch',
+    }
+  };
+
+  axios(reqSettings).then((response) => {
+    let { data } = response;
+    return res.send(data);
+  })
+  .catch(error => console.log(error));
+
+});
+
+app.get('/sunrise_sunset', (req, res) => {
+
+  let lat = req.query.latitude;
+  let lng = req.query.longitude; 
+
+  if (!lat || !lng) {
+    return res.send({});
+  }
+
+  const reqSettings = {
+    method: 'GET',
+    timeout: API_TIMEOUT_SECONDS * 1000,
+    url: SUNRISE_SUNSET_API_BASE + "/json",
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+      'Access-Control-Allow-Origin': '*',
+    },
+    params: {
+      lat, lng
     }
   };
 

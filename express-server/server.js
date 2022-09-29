@@ -5,7 +5,7 @@ const axios = require('axios');
 var fs = require('fs');
 const csv = require('csv-parser');
 
-const MAX_CITIES = 5000;
+const MAX_CITIES = 1000;
 const FORECAST_API_BASE = "https://api.open-meteo.com/v1/forecast";
 const API_TIMEOUT_SECONDS = 2;
 

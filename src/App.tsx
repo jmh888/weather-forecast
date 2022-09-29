@@ -4,6 +4,10 @@ import { WeatherTable } from './stories/WeatherTable';
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import { getWeatherInfo } from './api/WeatherApi';
 import { getAllCities } from './api/CitiesApi';
+import { Dropdown, Menu, Item, Trigger } from '@zendeskgarden/react-dropdowns';
+import { Button } from '@zendeskgarden/react-buttons';
+
+const LOADING = '---';
 interface CityOption {
   name: string;
   latitude: any;
@@ -32,10 +36,14 @@ function WeatherApp() {
     enabled: cityOptions && cityOptions.length > 0,
     placeholderData: [...Array(50)].map((_, i) => {
       return {
-        timeStamp: 'Loading...',
-        temperature: 'Loading...',
-        humidity: 'Loading...',
-        windSpeed: 'Loading...',
+        timeStamp: LOADING,
+        temperature: LOADING,
+        humidity: LOADING,
+        windSpeed: LOADING,
+        windGusts: LOADING,
+        rain: LOADING,
+        pressureMsl: LOADING,
+        surfacePressure: LOADING,
       }
     }),
   });
@@ -51,31 +59,30 @@ function WeatherApp() {
       </header>
 
       {
-        cityOptions && <h2>Forecast for {cityOptions?.find(opt => opt.name === selectedCity)?.name}</h2>
+        cityOptions && <h2>{cityOptions?.find(opt => opt.name === selectedCity)?.name}</h2>
       }
 
-      <label>Choose a US city from {cityOptions?.length} available: </label>
-
-      <select name="cities"
-              id="cities"
-              onChange = { (e) => {
-                setSelectedCity(e.target.value);
-              } }
-              style={{marginBottom: '2rem'}}>
-        {
-          cityOptions &&
-          cityOptions.map((city, i) => 
-            <option value={city.name} key={`city-name-${i}`}>{i+1}. {city.name}</option>
-          )
-        }
-      </select> 
+      <Dropdown onSelect={value => setSelectedCity(value)}>
+        <Trigger>
+          <Button style={{marginBottom: '1rem'}}>Change City</Button>
+        </Trigger>
+        <Menu placement="end" hasArrow>
+          {
+            cityOptions &&
+            cityOptions.map((city, i) => 
+              <Item value={city.name}>{i+1}. {city.name}</Item>
+            )
+          }
+        </Menu>
+      </Dropdown>
 
       <div>
         {
           !weatherDataQuery.isLoading && weatherDataQuery.data.length > 0 &&
             <div>
-              Time range: {weatherDataQuery.data[0].timeStamp} - {weatherDataQuery.data[weatherDataQuery.data.length - 1].timeStamp}
-              <WeatherTable weatherInfoList={weatherDataQuery.data}/>
+              <WeatherTable
+                caption={`Displaying ${weatherDataQuery.data[0].timeStamp} to ${weatherDataQuery.data[weatherDataQuery.data.length - 1].timeStamp}`}
+                weatherInfoList={weatherDataQuery.data}/>
             </div>
         }
       </div>

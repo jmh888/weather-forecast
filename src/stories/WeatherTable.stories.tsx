@@ -14,7 +14,8 @@ export default {
 const Template: ComponentStory<typeof WeatherTable> = (args) => <WeatherTable {...args} />;
 
 export const Primary = Template.bind({});
-Primary.args = { 
+Primary.args = {
+  caption: 'Table Story',
   weatherInfoList: [
     {
       timeStamp: new Date("Tuesday, Sep 27, 2022, 2:00 PM").toString(),

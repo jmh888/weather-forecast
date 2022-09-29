@@ -16,8 +16,32 @@ Open: http://localhost:3001/
 
 # Technologies:
 
+## Express JS
+
+To serve data to the frontend
+
+https://expressjs.com/
+
+## React JS
+
+https://reactjs.org/
+
+## Zendesk Garden React Components:
+
+https://github.com/zendeskgarden/react-components
+
+## Tanstack React Query
+
+https://tanstack.com/query/v4/docs/overview
+
+## TypeScript
+
+https://www.typescriptlang.org/
+
 ## Storybook
 
-Used to develop components isolated.
+storybook.js.org/
+
+> Build UIs in isolation
 
 Installed with `npx storybook init` and ran with `npm run storybook`

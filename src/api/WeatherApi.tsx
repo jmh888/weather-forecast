@@ -1,6 +1,10 @@
 import axios from 'axios';
 
 export const getWeatherInfo = async (latitude: number, longitude: number) => {
+  if (latitude === undefined || longitude === undefined) {
+    return [];
+  }
+  
   let url = `/weather?latitude=${latitude}&longitude=${longitude}`;
 
   let res = await axios.get(url);

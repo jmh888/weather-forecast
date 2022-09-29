@@ -54,7 +54,7 @@ function WeatherApp() {
         cityOptions && <h2>Forecast for {cityOptions?.find(opt => opt.name === selectedCity)?.name}</h2>
       }
 
-      <label>Choose a city ({cityOptions?.length} available): </label>
+      <label>Choose a US city from {cityOptions?.length} available: </label>
 
       <select name="cities"
               id="cities"
@@ -65,23 +65,20 @@ function WeatherApp() {
         {
           cityOptions &&
           cityOptions.map((city, i) => 
-            <option value={city.name} key={`city-name-${i}`}>{city.name}</option>
+            <option value={city.name} key={`city-name-${i}`}>{i+1}. {city.name}</option>
           )
         }
       </select> 
 
       <div>
         {
-          !weatherDataQuery.isLoading &&
+          !weatherDataQuery.isLoading && weatherDataQuery.data.length > 0 &&
             <div>
               Time range: {weatherDataQuery.data[0].timeStamp} - {weatherDataQuery.data[weatherDataQuery.data.length - 1].timeStamp}
+              <WeatherTable weatherInfoList={weatherDataQuery.data}/>
             </div>
         }
       </div>
-
-      {
-        !weatherDataQuery.isLoading && weatherDataQuery.data.length > 0 && <WeatherTable weatherInfoList={weatherDataQuery.data}/>
-      }
     </div>
   );
 }

@@ -3,8 +3,9 @@ const app = express(); //Line 2
 const port = process.env.PORT || 5000; //Line 3
 const axios = require('axios');
 var fs = require('fs');
-const csv = require('csv-parser')
+const csv = require('csv-parser');
 
+const MAX_CITIES = 5000;
 const FORECAST_API_BASE = "https://api.open-meteo.com/v1/forecast";
 const API_TIMEOUT_SECONDS = 2;
 
@@ -53,7 +54,7 @@ app.get('/all-cities', async (req, res) => {
     .pipe(csv())
     .on('data', (data) => results.push(data))
     .on('end', () => {
-      return res.send(results.map(r => ({
+      return res.send(results.slice(0, MAX_CITIES).map(r => ({
         name: `${r.city}, ${r.state_name}`,
         latitude: r.lat,
         longitude: r.lng,
